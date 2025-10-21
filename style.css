@@ -5,8 +5,17 @@
 
 @font-face {
   font-family: 'Kirsty Regular';
-  src: url(./assets/Kirsty.ttf);
+  src: url('./assets/Kirsty.ttf');
 }
+
+:root {
+  --bg-color: #fff;
+}
+
+.dark {
+  --bg-color: #2a2a2a;
+}
+
 * {
   font-family: 'Hapna Demibold';
   margin: 0;
@@ -16,6 +25,30 @@
 
 h2 {
   font-family: 'Kirsty Regular';
+}
+
+.results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.result-label {
+  flex: 1;
+  text-align: left;
+}
+
+.result-value {
+  min-width: 80px;
+  text-align: right;
 }
 
 .alert-content h2 {
@@ -66,13 +99,207 @@ body {
   background-image: url('./assets/bg.jpg');
 }
 
+/* 🕒 Horizontal expanding time dropdown */
+.horizontal-time-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 14px;
+  cursor: pointer;
+}
+
+.horizontal-time-dropdown .time-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: #bc0517;
+  transition: transform 0.25s ease, fill 0.25s ease;
+}
+
+.horizontal-time-dropdown.open .time-icon svg {
+  transform: rotate(90deg);
+  fill: #a00412;
+}
+
+/* Time options appear inline next to icon */
+.time-options {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+  opacity: 1;
+  transform: scaleX(1);
+  transform-origin: left center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.time-options.hidden {
+  opacity: 0;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+.time-options span {
+  font-family: 'Kirsty Regular';
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.time-options span:hover {
+  color: #bc0517;
+  border-color: #bc0517;
+  background: rgba(188, 5, 23, 0.05);
+}
+
+/* Dark mode */
+body.dark .time-options span {
+  color: #ddd;
+}
+
+body.dark .time-options span:hover {
+  color: #bc0517;
+  border-color: #bc0517;
+  background: rgba(188, 5, 23, 0.2);
+}
+
+/* --- Input Indicator Styles --- */
+
+.input-field-wrapper {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
+}
+
+/* Visually hide the input field but keep it accessible for typing */
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Style the typewriter indicator icon wrapper */
+.input-indicator {
+  width: 40px; /* Smaller container */
+  height: 40px; /* Smaller container */
+  background-color: transparent; /* Remove background */
+  border-radius: 0; /* Remove border-radius */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: text;
+  box-shadow: none; /* Remove shadow */
+}
+
+/* Style the SVG icon */
+.typewriter-icon {
+  width: 25px; /* Smaller icon */
+  height: 25px; /* Smaller icon */
+  fill: #777; /* Default unfocused color (Dark Gray) */
+  transition: fill 0.3s ease;
+}
+
+/* The state when the hidden input field is focused: change ICON color */
+.input-indicator.focused .typewriter-icon {
+  fill: #bc0517; /* Focused icon color (Red) */
+}
+
+/* Dark mode styles for the indicator */
+body.dark .input-indicator {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+body.dark .typewriter-icon {
+  fill: #aaa; /* Default unfocused color for dark mode */
+}
+
+body.dark .input-indicator.focused .typewriter-icon {
+  fill: #bc0517; /* Focused icon color (Red) */
+}
+
+/* --- Media Query Adjustments for Mobile Layout --- */
+
+@media (max-width: 768px) {
+  .top-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .input-field-wrapper {
+    width: 100%;
+    margin: 10px 0; 
+    order: 2;
+  }
+
+  .completion-percentage {
+    order: 1;
+  }
+
+  .score-container {
+    order: 3;
+  }
+}
+
+/* --- Hotkeys and Hint Styles --- */
+
+/* Ensure the overall hotkeys container allows its block-level child (the hint) to force a line break */
+.paragraph-instructions.hotkeys-tooltip {
+  display: inline-block;
+  text-align: left; /* Aligns the hotkeys and the hint to the left within their container */
+}
+
+/* Ensure individual hotkey items flow inline */
+.hotkey-item {
+  display: inline-block;
+  margin-right: 10px; 
+}
+
+/* The hint text is explicitly set to block to force it onto a new line */
+.hotkey-hint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2em;
+  color: #888; 
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  text-align: center;
+  z-index: 10;
+}
+
+.hotkey-hint:hover {
+  opacity: 1;
+}
+
+/* Dark mode adjustment for the hint */
+body.dark .hotkey-hint {
+  color: #bbb;
+}
+
+
 .wrapper {
   width: 900px;
   padding: 35px;
   background: #fff;
   border-radius: 10px;
   border: 0.5px solid #bc0517;
+  position: relative;
+  /* allow absolute children like translate corner */
 }
+
 
 .wrapper .content-box {
   padding: 13px 20px 0;
@@ -86,9 +313,30 @@ body {
 }
 
 .content-box .typing-text {
-  max-height: 255px;
-  overflow-y: auto;
+  height: calc(24px * 1.7 * 3);
+  /* font-size * line-height * 3 lines */
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 10px 0;
 }
+
+.typing-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(transparent, var(--bg-color, #fff));
+  pointer-events: none;
+}
+
+.dark .typing-text::after {
+  background: linear-gradient(transparent, var(--bg-color, #2a2a2a));
+}
+
+
 
 abbr {
   text-decoration: none;
@@ -103,11 +351,16 @@ ul li {
 }
 
 .typing-text p {
-  font-size: 21px;
-  text-align: justify;
+  font-size: 28px;
+  text-align: left;
   letter-spacing: 1px;
-  word-break: normal;
+  word-break: breaword;
   white-space: pre-wrap;
+  line-height: 1.5;
+  transform: translateY(0);
+  will-change: transform;
+  margin: 0;
+  padding: 0;
 }
 
 .typing-text p span.correct {
@@ -212,14 +465,21 @@ ul li {
   margin: 10px;
 }
 
-.time-selector {
-  padding: 10px;
+.top-controls select.time-selector {
+  padding: 8px 30px 8px 10px;
   font-size: 15px;
   border: 1px solid #bc0517;
   border-radius: 4px;
   background-color: #fff;
   width: 160px;
   margin-right: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23bc0517" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  cursor: pointer;
 }
 
 .result-details,
@@ -414,11 +674,11 @@ button:disabled {
   transition: 0.4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #bc0517;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(18px);
 }
 
@@ -455,6 +715,8 @@ input:checked + .slider:before {
   background-color: #444;
 }
 
+
+
 .dark .content-box {
   border: 1px solid #bc0517;
 }
@@ -462,6 +724,7 @@ input:checked + .slider:before {
 .dark .content-box .content {
   border-top: 1px solid #bc0517;
 }
+
 .dark .time-selector {
   background-color: #555;
   border: 1px solid #bc0517;
@@ -496,8 +759,7 @@ body.dark {
 }
 
 body.dark .wrapper {
-  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center
-    center;
+  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center center;
   background-size: cover;
   color: #e0e0e0;
   border: 0.5px solid #bc0517;
@@ -524,14 +786,13 @@ body.dark .content button {
 }
 
 body.dark .time-selector {
-  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center
-    center;
+  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center center;
   border-color: #444;
   color: #e0e0e0;
 }
+
 body.dark .alert-content {
-  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center
-    center;
+  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center center;
   background-size: cover;
   color: #e0e0e0;
   border: 0.5px solid #e0e0e0;
@@ -553,6 +814,7 @@ body.dark .dark-mode-toggle {
     padding-left: 22px;
     border-left: none;
   }
+
   .wrapper {
     width: 90%;
     padding: 20px;
@@ -608,6 +870,7 @@ body.dark .dark-mode-toggle {
     padding-left: 22px;
     border-left: none;
   }
+
   .input-field {
     font-size: 14px;
   }
@@ -633,8 +896,165 @@ body.dark .dark-mode-toggle {
   }
 }
 
-#google_translate_element {
-  margin-left: 10px;
-  padding-left: 10px;
-  border-left: 0.5px solid #bc0517;
+
+.paragraph-instructions {
+  margin-left: auto;
+  font-size: 14px;
+  color: gray;
+}
+
+.paragraph-instructions.hotkeys-tooltip {
+  background: transparent;
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 6px;
+  display: inline-flex;
+  gap: 20px;
+  font-size: 12px;
+  box-shadow: none;
+}
+
+.dark .paragraph-instructions.hotkeys-tooltip {
+  background: transparent;
+  color: #e0e0e0;
+}
+
+.hotkeys-tooltip .hotkey-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hotkeys-tooltip kbd {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+.dark .hotkeys-tooltip kbd {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* --- Accuracy Row --- */
+.accuracy-row {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.accuracy-row .result-label,
+.accuracy-row .result-value {
+  font-size: 1.2em !important;
+  display: block;
+  font-weight: bold;
+  font-family: 'Kirsty';
+  margin: 0;
+  line-height: 1.1;
+}
+
+.accuracy-row .result-label {
+  color: #bc0517;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 2px;
+}
+
+.accuracy-row .result-value {
+  color: #e0e0e0;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.dark .accuracy-row .result-value {
+  color: #e0e0e0;
+}
+
+/* --- Completion Row --- */
+.completion-row {
+  margin-top: 6px;
+  text-align: center;
+  padding-top: 6px;
+  /* smooth vertical rhythm */
+}
+
+.completion-row .result-label,
+.completion-row .result-value {
+  display: block;
+  font-weight: bold;
+  font-family: 'Kirsty';
+  margin: 0;
+  line-height: 1.1;
+}
+
+.completion-row .result-label {
+  font-size: 1.4em;
+  color: #bc0517;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 2px;
+}
+
+/* --- Accuracy Row --- */
+.accuracy-row .result-label,
+.accuracy-row .result-value,
+.completion-row .result-label,
+.completion-row .result-value {
+  display: block;
+  font-weight: bold;
+  font-family: 'Kirsty';
+  margin: 0;
+  line-height: 1.1;
+}
+
+.accuracy-row .result-label {
+  color: #bc0517;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.accuracy-row .result-value {
+  color: #e0e0e0;
+  letter-spacing: 0.5px;
+}
+
+.dark .accuracy-row .result-value {
+  color: #e0e0e0;
+}
+
+/* --- Completion Row --- */
+.completion-row .result-label {
+  color: #bc0517;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 2px;
+}
+
+.completion-row .result-value {
+  color: #e0e0e0;
+  letter-spacing: 0.5px;
+}
+
+.dark .completion-row .result-value {
+  color: #e0e0e0;
+}
+
+.accuracy-row .result-value,
+.completion-row .result-value {
+  margin-bottom: 22px;
+}
+
+.completion-row .result-value {
+  font-size: 1.3em;
+  color: #e0e0e0;
+  letter-spacing: 0.5px;
+}
+
+.dark .completion-row .result-value {
+  color: #e0e0e0;
 }

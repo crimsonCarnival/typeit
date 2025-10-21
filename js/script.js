@@ -1,291 +1,107 @@
-const textDisplay = document.querySelector('.typing-text p'),
-  input = document.querySelector('.top-controls .input-field'),
-  mistakeCount = document.querySelector('.mistake span'),
-  accuracyDisplay = document.querySelector('.accuracy span'),
-  timeDisplay = document.querySelector('.time span b'),
-  wpmDisplay = document.querySelector('.wpm span'),
-  cpmDisplay = document.querySelector('.cpm span'),
-  timeDropdown = document.querySelector('.top-controls .time-selector'),
-  options = timeDropdown.querySelectorAll('option'),
-  tryAgain = document.querySelector('.content button'),
-  scoreDisplay = document.querySelector('.score-container #score'),
-  alertCard = document.querySelector('.alert-card'),
-  finalScoreDisplay = document.querySelector('#final-score'),
-  finalMistakesDisplay = document.querySelector('#final-mistakes'),
-  finalAccuracyDisplay = document.querySelector('#final-accuracy'),
-  finalWpmDisplay = document.querySelector('#final-wpm'),
-  finalCpmDisplay = document.querySelector('#final-cpm'),
-  closeAlertButton = document.querySelector('#close-alert'),
-  completionDisplay = document.querySelector('#completion'),
-  themeToggle = document.querySelector('#theme-toggle'),
-  draggable = document.querySelector('.draggable'),
-  wrapper = document.querySelector('.wrapper'),
-  infoAlert = document.querySelector('.info-alert'),
-  closeInfoAlertButton = document.getElementById('close-info-alert')
+// script.js
+import { elements, setInputDisabled, setTryAgain, setupDragHandlers, setupHorizontalTimeDropdown, setTimeSelectionVisible } from './modules/ui.js'
+import { gameState, handleTyping, resetGame, randomParagraph, nextParagraph, setMuted } from './modules/game.js'
+import { startTimer } from './modules/timer.js'
+import { toggleMode } from './modules/theme.js'
 
-let i = 0,
-  mistakes = 0,
-  successes = 0,
-  accuracy = 0,
-  timer = 0,
-  timeMax = 120,
-  timeLeft = timeMax,
-  isTyping = false,
-  score = 0,
-  maxScore = 0,
-  completionPercentage = 0,
-  initialAlertX = 0,
-  initialAlertY = 0,
-  isDraggingAlert = false
+// Initialize drag functionality & UI helpers
+setupDragHandlers()
+setupHorizontalTimeDropdown()
 
-const keySound = new Audio('/assets/typewriter-single-key.mp3'),
-  timeUpSound = new Audio('/assets/typewriter-bell.mp3')
+// REMOVED: Time selector event handler for the now-removed hidden select
 
-draggable.addEventListener('mousedown', (event) => {
-  isDraggingAlert = true
-  event.preventDefault()
-  initialAlertX = event.clientX - draggable.offsetLeft
-  initialAlertY = event.clientY - draggable.offsetTop
-  document.addEventListener('mousemove', dragAlert)
-  document.addEventListener('mouseup', stopDragAlert)
-})
+// Handle escape key and theme toggle
+const handleHotkeys = (event) => {
+  const activeEl = document.activeElement
+  const isTyping = activeEl && activeEl.classList.contains('input-field')
 
-const dragAlert = (event) => {
-  if (isDraggingAlert) {
-    const newX = event.clientX - initialAlertX
-    const newY = event.clientY - initialAlertY
-    draggable.style.left = `${newX}px`
-    draggable.style.top = `${newY}px`
-  }
-}
-
-const stopDragAlert = () => {
-  isDraggingAlert = false
-  document.removeEventListener('mousemove', dragAlert)
-  document.removeEventListener('mouseup', stopDragAlert)
-}
-
-const setInputDisabled = (isDisabled) => {
-  input.disabled = isDisabled
-  input.style.cursor = isDisabled ? 'not-allowed' : 'auto'
-}
-
-const setTryAgain = (isDisabled) => {
-  tryAgain.disabled = isDisabled
-  tryAgain.style.cursor = isDisabled ? 'not-allowed' : 'pointer'
-}
-
-const updateScore = (isCorrect) => {
-  score = isCorrect ? score + 1 : Math.max(0, score - 1)
-  scoreDisplay.innerText = `${score}/${maxScore}`
-}
-
-const randomParagraph = () => {
-  const randIndex = Math.floor(Math.random() * paragraphs.length)
-  textDisplay.innerHTML = ''
-  input.value = ''
-  const paragraph = paragraphs[randIndex]
-  maxScore = paragraph.length
-  paragraph.split('').forEach((char) => {
-    let spanTag = `<span>${char}</span>`
-    textDisplay.innerHTML += spanTag
-  })
-}
-
-const handleTyping = () => {
-  if (input.disabled) return
-  const characters = textDisplay.querySelectorAll('span')
-  const typedChar = input.value.split('')[i]
-
-  if (!isTyping) {
-    timer = setInterval(updateTimer, 1000)
-    setInputDisabled(true)
-    setTryAgain(true)
-    isTyping = true
-  }
-
-  if (input.value.length < i) {
-    i--
-    mistakes++
-    updateScore(false)
-    return
-  }
-
-  if (!typedChar) {
-    i--
-    mistakes++
-    characters[i].classList.add('active')
-  } else {
-    if (characters[i].innerText === typedChar) {
-      successes++
-      characters[i].classList.add('correct')
-      updateScore(true)
-    } else {
-      mistakes++
-      characters[i].classList.add('incorrect')
-      updateScore(false)
-      keySound.play()
-    }
-
-    i++
-  }
-
-  characters.forEach((span) => span.classList.remove('active'))
-  characters[i]?.classList.add('active')
-
-  mistakeCount.innerText = mistakes
-
-  const totalTyped = successes + mistakes
-
-  accuracy = totalTyped > 0 ? ((successes / totalTyped) * 100).toFixed(2) : 0
-  accuracyDisplay.innerText = `${accuracy}%`
-
-  let totalTime = timeMax - timeLeft,
-    totalTimeMin = totalTime / 60,
-    totalChars = i - mistakes,
-    cpm = totalChars,
-    wpm = Math.round(totalChars / (5 * totalTimeMin))
-
-  cpmDisplay.innerText = cpm
-  wpmDisplay.innerText = wpm
-
-  const totalCharacters = textDisplay.querySelectorAll('span').length
-  completionPercentage =
-    totalCharacters > 0 ? ((i / totalCharacters) * 100).toFixed(2) : 0
-  document.getElementById('completion').innerText = `${completionPercentage}%`
-
-  if (completionPercentage >= 100) handleEnd()
-  if (score <= 0) score = 0
-  if (mistakes <= 0) mistakes = 0
-  if (Number.isNaN(wpm) || !wpm) wpm = 0
-  if (Number.isNaN(cpm) || !cpm) cpm = 0
-}
-
-const showResults = () => {
-  document.querySelector('.result-details').classList.add('hidden')
-  document.querySelector('.alert-card').classList.remove('hidden')
-
-  finalScoreDisplay.innerText = scoreDisplay.innerText
-  finalMistakesDisplay.innerText = mistakeCount.innerText
-  finalAccuracyDisplay.innerText = accuracyDisplay.innerText
-  finalWpmDisplay.innerText = wpmDisplay.innerText
-  finalCpmDisplay.innerText = cpmDisplay.innerText
-
-  document.querySelector('#final-time').innerText = timeLeft
-  document.querySelector(
-    '#final-completion'
-  ).innerText = `${completionPercentage}%`
-  options.selectedIndex = 0
-}
-
-const handleEnd = () => {
-  clearInterval(timer)
-  setInputDisabled(true)
-  setTryAgain(true)
-  input.removeEventListener('input', handleTyping)
-  timeUpSound.play()
-  showResults()
-  options.selectedIndex = 0
-}
-
-const updateTimer = () => {
-  if (timeLeft > 0) {
-    timeLeft--
-    timeDisplay.innerText = timeLeft
-  } else {
-    handleEnd()
-  }
-}
-
-const startTimer = () => {
-  if (!isTyping) {
-    timer = setInterval(updateTimer, 1000)
-    isTyping = true
-  }
-}
-
-const resetGame = () => {
-  clearInterval(timer)
-  randomParagraph()
-  i = 0
-  mistakes = 0
-  successes = 0
-  accuracy = 0
-  timeLeft = timeMax
-  timeDisplay.innerText = timeLeft
-  mistakeCount.innerText = mistakes
-  accuracyDisplay.innerText = `${accuracy}%`
-  wpm = 0
-  cpm = 0
-  wpmDisplay.innerText = wpm
-  cpmDisplay.innerText = cpm
-  score = 0
-  scoreDisplay.innerText = `${score}/${maxScore}`
-  input.value = ''
-  setInputDisabled(true)
-  setTryAgain(true)
-  timeDropdown.style.display = 'block'
-  timeDropdown.value = 0
-  document.querySelector('.time').style.display = 'none'
-  isTyping = false
-  input.removeEventListener('input', handleTyping)
-  completionPercentage = 0
-  completionDisplay.innerText = `${completionPercentage}%`
-  input.value = ''
-}
-
-timeDropdown.addEventListener('change', () => {
-  timeMax = parseInt(timeDropdown.value)
-  timeLeft = timeMax
-  timeDisplay.innerText = timeLeft
-
-  timeDropdown.style.display = 'none'
-  document.querySelector('.time').style.display = 'block'
-  setInputDisabled(false)
-  setTryAgain(false)
-})
-
-const handleEsc = (event) => {
   if (event.key === 'Escape') {
-    alertCard.classList.add('hidden')
-    document.querySelector('.result-details').classList.remove('hidden')
-    timeDropdown.value = ''
+    // If alert is visible, close it
+    if (!elements.alertCard.classList.contains('hidden')) {
+      elements.alertCard.classList.add('hidden')
+      document.querySelector('.result-details').classList.remove('hidden')
+    }
+    // Always reset game on Esc
     resetGame()
   }
+
+  if (event.key.toLowerCase() === 't' && !isTyping) {
+    elements.themeToggle.checked = !elements.themeToggle.checked
+    elements.themeToggle.dispatchEvent(new Event('change'))
+  }
 }
 
-document.addEventListener('keydown', handleEsc)
+document.addEventListener('keydown', handleHotkeys)
 
-closeAlertButton.addEventListener('click', () => {
-  alertCard.classList.add('hidden')
-  document.querySelector('.result-details').classList.remove('hidden')
-  resetGame()
-  setInputDisabled(false)
-  document.removeEventListener('keydown', handleEsc)
-})
-
-infoAlert.classList.remove('hidden')
-
-// Close the info alert
-closeInfoAlertButton.addEventListener('click', () => {
-  infoAlert.classList.add('hidden')
-})
-
-// Close the info alert
-closeInfoAlertButton.addEventListener('click', () => {
-  infoAlert.classList.add('hidden')
-})
-
-const toggleMode = () => {
-  document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark')
-      themeToggle.checked = true
-    } else {
-      document.body.classList.remove('dark')
-      themeToggle.checked = false
-    }
+// Close alert handlers
+if (elements.closeAlertButton) {
+  elements.closeAlertButton.addEventListener('click', () => {
+    elements.alertCard.classList.add('hidden')
+    document.querySelector('.result-details').classList.remove('hidden')
+    resetGame()
+    setInputDisabled(false)
   })
+}
+
+// Initialize game
+if (elements.input && elements.input.disabled) {
+  setTryAgain(false)
+}
+
+// Set up event listeners
+randomParagraph()
+
+if (elements.input) {
+  elements.input.addEventListener('input', handleTyping)
+}
+
+if (elements.tryAgain) elements.tryAgain.addEventListener('click', resetGame)
+if (elements.themeToggle) elements.themeToggle.addEventListener('click', toggleMode)
+
+const nextParagraphBtn = document.getElementById('next-paragraph')
+if (nextParagraphBtn) {
+  nextParagraphBtn.addEventListener('click', nextParagraph)
+}
+
+// --- Mute functionality ---
+const soundToggle = document.getElementById('sound-toggle')
+if (soundToggle) {
+  soundToggle.addEventListener('change', () => {
+    setMuted(!soundToggle.checked)
+    localStorage.setItem('soundMuted', (!soundToggle.checked).toString())
+  })
+}
+
+// Handle 'M' key toggle
+document.addEventListener('keydown', (event) => {
+  const activeEl = document.activeElement
+  const isTyping = activeEl && activeEl.classList.contains('input-field')
+
+  if (event.key.toLowerCase() === 'm' && !isTyping) {
+    if (soundToggle) {
+      soundToggle.checked = !soundToggle.checked
+      setMuted(!soundToggle.checked)
+      localStorage.setItem('soundMuted', (!soundToggle.checked).toString())
+    }
+  }
+})
+
+// Restore saved mute state
+const savedMute = localStorage.getItem('soundMuted')
+if (savedMute !== null && soundToggle) {
+  const muted = savedMute === 'true'
+  soundToggle.checked = !muted
+  setMuted(muted)
+}
+
+// --- Dark mode persistence ---
+const themeToggle = document.getElementById('theme-toggle')
+if (themeToggle) {
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark')
+    themeToggle.checked = true
+  }
 
   themeToggle.addEventListener('change', () => {
     if (themeToggle.checked) {
@@ -297,11 +113,3 @@ const toggleMode = () => {
     }
   })
 }
-
-if (input.disabled) setTryAgain(false)
-
-randomParagraph()
-input.addEventListener('input', handleTyping)
-input.addEventListener('focus', startTimer)
-tryAgain.addEventListener('click', resetGame)
-themeToggle.addEventListener('click', toggleMode)
