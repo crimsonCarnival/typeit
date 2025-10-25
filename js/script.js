@@ -1,39 +1,34 @@
-// script.js
-import { elements, setInputDisabled, setTryAgain, setupDragHandlers, setupHorizontalTimeDropdown, setTimeSelectionVisible } from './modules/ui.js'
+import { elements, setInputDisabled, setTryAgain, setupDragHandlers, setupHorizontalTimeDropdown, setTimeSelectionVisible, setupHorizontalModeDropdown, setupHorizontalWordCountDropdown } from './modules/ui.js'
 import { gameState, handleTyping, resetGame, randomParagraph, nextParagraph, setMuted } from './modules/game.js'
 import { startTimer } from './modules/timer.js'
-import { toggleMode } from './modules/theme.js'
 
-// Initialize drag functionality & UI helpers
 setupDragHandlers()
 setupHorizontalTimeDropdown()
+setupHorizontalModeDropdown()
+setupHorizontalWordCountDropdown()
 
-// REMOVED: Time selector event handler for the now-removed hidden select
+window.resetGame = resetGame
 
-// Handle escape key and theme toggle
 const handleHotkeys = (event) => {
   const activeEl = document.activeElement
   const isTyping = activeEl && activeEl.classList.contains('input-field')
 
   if (event.key === 'Escape') {
-    // If alert is visible, close it
     if (!elements.alertCard.classList.contains('hidden')) {
       elements.alertCard.classList.add('hidden')
       document.querySelector('.result-details').classList.remove('hidden')
     }
-    // Always reset game on Esc
     resetGame()
   }
 
   if (event.key.toLowerCase() === 't' && !isTyping) {
-    elements.themeToggle.checked = !elements.themeToggle.checked
-    elements.themeToggle.dispatchEvent(new Event('change'))
+    const el = document.getElementById('theme-toggle')
+    if (el) el.click()
   }
 }
 
 document.addEventListener('keydown', handleHotkeys)
 
-// Close alert handlers
 if (elements.closeAlertButton) {
   elements.closeAlertButton.addEventListener('click', () => {
     elements.alertCard.classList.add('hidden')
@@ -43,73 +38,98 @@ if (elements.closeAlertButton) {
   })
 }
 
-// Initialize game
 if (elements.input && elements.input.disabled) {
   setTryAgain(false)
 }
 
-// Set up event listeners
 randomParagraph()
+
+import { updateScore } from './modules/ui.js'
+updateScore(0, gameState.maxScore)
 
 if (elements.input) {
   elements.input.addEventListener('input', handleTyping)
 }
 
 if (elements.tryAgain) elements.tryAgain.addEventListener('click', resetGame)
-if (elements.themeToggle) elements.themeToggle.addEventListener('click', toggleMode)
 
 const nextParagraphBtn = document.getElementById('next-paragraph')
 if (nextParagraphBtn) {
   nextParagraphBtn.addEventListener('click', nextParagraph)
 }
 
-// --- Mute functionality ---
 const soundToggle = document.getElementById('sound-toggle')
 if (soundToggle) {
-  soundToggle.addEventListener('change', () => {
-    setMuted(!soundToggle.checked)
-    localStorage.setItem('soundMuted', (!soundToggle.checked).toString())
+  const savedMute = localStorage.getItem('soundMuted')
+  const muted = savedMute === 'true'
+  soundToggle.classList.toggle('active', !muted)
+  const icon = soundToggle.querySelector('i')
+  if (icon) {
+    icon.className = muted ? 'fas fa-volume-xmark' : 'fas fa-volume-up'
+  }
+  setMuted(muted)
+
+  soundToggle.addEventListener('click', () => {
+    const willBeActive = !soundToggle.classList.contains('active')
+    soundToggle.classList.toggle('active', willBeActive)
+    const nowMuted = !willBeActive
+    const icon = soundToggle.querySelector('i')
+    if (icon) {
+      icon.className = nowMuted ? 'fas fa-volume-xmark' : 'fas fa-volume-up'
+    }
+    setMuted(nowMuted)
+    localStorage.setItem('soundMuted', nowMuted.toString())
   })
 }
 
-// Handle 'M' key toggle
 document.addEventListener('keydown', (event) => {
   const activeEl = document.activeElement
   const isTyping = activeEl && activeEl.classList.contains('input-field')
 
   if (event.key.toLowerCase() === 'm' && !isTyping) {
     if (soundToggle) {
-      soundToggle.checked = !soundToggle.checked
-      setMuted(!soundToggle.checked)
-      localStorage.setItem('soundMuted', (!soundToggle.checked).toString())
+      const willBeActive = !soundToggle.classList.contains('active')
+      soundToggle.classList.toggle('active', willBeActive)
+      const nowMuted = !willBeActive
+      setMuted(nowMuted)
+      localStorage.setItem('soundMuted', nowMuted.toString())
     }
   }
 })
 
-// Restore saved mute state
-const savedMute = localStorage.getItem('soundMuted')
-if (savedMute !== null && soundToggle) {
-  const muted = savedMute === 'true'
-  soundToggle.checked = !muted
-  setMuted(muted)
-}
-
-// --- Dark mode persistence ---
 const themeToggle = document.getElementById('theme-toggle')
 if (themeToggle) {
   const savedTheme = localStorage.getItem('theme')
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark')
-    themeToggle.checked = true
+  const isDark = savedTheme === 'dark'
+  document.body.classList.toggle('dark', isDark)
+  themeToggle.classList.toggle('active', isDark)
+
+  const applyTheme = (dark) => {
+    document.body.classList.toggle('dark', dark)
+    themeToggle.classList.toggle('active', dark)
+    localStorage.setItem('theme', dark ? 'dark' : 'light')
   }
 
-  themeToggle.addEventListener('change', () => {
-    if (themeToggle.checked) {
-      document.body.classList.add('dark')
-      localStorage.setItem('theme', 'dark')
-    } else {
-      document.body.classList.remove('dark')
-      localStorage.setItem('theme', 'light')
-    }
+  themeToggle.addEventListener('click', () => {
+    const dark = !document.body.classList.contains('dark')
+    applyTheme(dark)
+  })
+}
+
+if (elements.toggleHintsBtn && elements.hotkeyItems) {
+  const saved = localStorage.getItem('shortcutsVisible')
+  const visible = saved === null ? true : saved === 'true'
+  if (!visible) {
+    elements.hotkeyItems.classList.add('hidden')
+    const txt = elements.toggleHintsBtn.querySelector('.hints-toggle-text')
+    if (txt) txt.textContent = 'Show Shortcuts'
+  }
+
+  elements.toggleHintsBtn.addEventListener('click', () => {
+    elements.hotkeyItems.classList.toggle('hidden')
+    const isHidden = elements.hotkeyItems.classList.contains('hidden')
+    const txt = elements.toggleHintsBtn.querySelector('.hints-toggle-text')
+    if (txt) txt.textContent = isHidden ? 'Show Shortcuts' : 'Hide Shortcuts'
+    localStorage.setItem('shortcutsVisible', (!isHidden).toString())
   })
 }
