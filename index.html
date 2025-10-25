@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
     <title>Typing Speed & Accuracy Test</title>
   </head>
@@ -10,24 +11,39 @@
     <div class="wrapper">
       <div class="theme-switch">
         <div class="toggle-container">
-          <label class="switch">
-            <input type="checkbox" id="theme-toggle" />
-            <span class="slider round"></span>
-          </label>
-          <span class="theme-label">Theme</span>
+          <div id="theme-toggle" class="toggle-icon" title="Theme">
+            <i class="fas fa-palette"></i>
+          </div>
 
-          <label class="switch" style="margin-left: 20px;">
-            <input type="checkbox" id="sound-toggle" />
-            <span class="slider round"></span>
-          </label>
-          <span class="theme-label">SFX</span>
+          <div id="sound-toggle" class="toggle-icon" title="SFX">
+            <i class="fas fa-volume-up"></i>
+          </div>
+
+          <div class="horizontal-mode-dropdown">
+            <div class="mode-icon" title="Select mode">
+              <i class="fas fa-sliders-h"></i>
+            </div>
+            <div class="mode-options hidden">
+              <span data-mode="phrases">Phrases</span>
+              <span data-mode="words">Words</span>
+            </div>
+          </div>
+
+          <div class="horizontal-wordcount-dropdown control-hidden" title="Select word count">
+            <div class="wordcount-icon">
+              <i class="fas fa-align-left"></i>
+            </div>
+            <div class="wordcount-options hidden">
+              <span data-count="25">25</span>
+              <span data-count="50" class="active">50</span>
+              <span data-count="75">75</span>
+              <span data-count="100">100</span>
+            </div>
+          </div>
 
           <div class="horizontal-time-dropdown">
             <div class="time-icon" title="Select time">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                <path
-                  d="M320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64zM296 184L296 320C296 328 300 335.5 306.7 340L402.7 404C413.7 411.4 428.6 408.4 436 397.3C443.4 386.2 440.4 371.4 429.3 364L344 307.2L344 184C344 170.7 333.3 160 320 160C306.7 160 296 170.7 296 184z" />
-              </svg>
+              <i class="fas fa-clock"></i>
             </div>
             <div class="time-options hidden">
               <span data-time="60">60</span>
@@ -37,32 +53,31 @@
             </div>
           </div>
 
-          <span class="paragraph-instructions hotkeys-tooltip">
-            <span class="hotkey-item"><kbd>Esc</kbd> Reset</span>
-            <span class="hotkey-item"><kbd>M</kbd> Mute</span>
-            <span class="hotkey-item"><kbd>T</kbd> Theme</span>
-            <span class="hotkey-hint">Unfocus input to access shortcuts<br/>Click back on the keyboard icon to focus input</span>
-          </span>
+          <div class="time header-time" style="display:none; margin-left:8px;">
+            <span><b>0</b></span>
+          </div>
+
         </div>
 
       </div>
 
-      <div class="content-box">
+  <div class="content-box">
         <div class="typing-text">
           <p translate="no"></p>
         </div>
 
         <div class="top-controls">
-          <div class="completion-percentage">
-            <span class="percentage" id="completion">0%</span>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
           </div>
 
           <div class="input-field-wrapper">
-            <div class="input-indicator" title="Type Here">
+            <div class="input-indicator" title="Click here to start typing">
               <svg class="typewriter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                 <path
                   d="M96 128C60.7 128 32 156.7 32 192L32 448C32 483.3 60.7 512 96 512L544 512C579.3 512 608 483.3 608 448L608 192C608 156.7 579.3 128 544 128L96 128zM112 192L144 192C152.8 192 160 199.2 160 208L160 240C160 248.8 152.8 256 144 256L112 256C103.2 256 96 248.8 96 240L96 208C96 199.2 103.2 192 112 192zM96 304C96 295.2 103.2 288 112 288L144 288C152.8 288 160 295.2 160 304L160 336C160 344.8 152.8 352 144 352L112 352C103.2 352 96 344.8 96 336L96 304zM208 192L240 192C248.8 192 256 199.2 256 208L256 240C256 248.8 248.8 256 240 256L208 256C199.2 256 192 248.8 192 240L192 208C192 199.2 199.2 192 208 192zM192 304C192 295.2 199.2 288 208 288L240 288C248.8 288 256 295.2 256 304L256 336C256 344.8 248.8 352 240 352L208 352C199.2 352 192 344.8 192 336L192 304zM208 384L432 384C440.8 384 448 391.2 448 400L448 432C448 440.8 440.8 448 432 448L208 448C199.2 448 192 440.8 192 432L192 400C192 391.2 199.2 384 208 384zM288 208C288 199.2 295.2 192 304 192L336 192C344.8 192 352 199.2 352 208L352 240C352 248.8 344.8 256 336 256L304 256C295.2 256 288 248.8 288 240L288 208zM304 288L336 288C344.8 288 352 295.2 352 304L352 336C352 344.8 344.8 352 336 352L304 352C295.2 352 288 344.8 288 336L288 304C288 295.2 295.2 288 304 288zM384 208C384 199.2 391.2 192 400 192L432 192C440.8 192 448 199.2 448 208L448 240C448 248.8 440.8 256 432 256L400 256C391.2 256 384 248.8 384 240L384 208zM400 288L432 288C440.8 288 448 295.2 448 304L448 336C448 344.8 440.8 352 432 352L400 352C391.2 352 384 344.8 384 336L384 304C384 295.2 391.2 288 400 288zM480 208C480 199.2 487.2 192 496 192L528 192C536.8 192 544 199.2 544 208L544 240C544 248.8 536.8 256 528 256L496 256C487.2 256 480 248.8 480 240L480 208zM496 288L528 288C536.8 288 544 295.2 544 304L544 336C544 344.8 536.8 352 528 352L496 352C487.2 352 480 344.8 480 336L480 304C480 295.2 487.2 288 496 288z" />
               </svg>
+              <span class="start-typing-hint">Click on the keyboard to type</span>
             </div>
             <input
               type="text"
@@ -72,33 +87,31 @@
               disabled />
           </div>
           <div class="score-container">
-            <p>Score&nbsp;<span id="score">0</span></p>
+            <span id="score">0</span>
           </div>
         </div>
 
         <div class="content">
           <ul class="result-details">
-            <li class="time">
-              <p>
-                <span><b>0</b>&nbsp;sec.</span>
-              </p>
-            </li>
             <li class="mistake">
               <p>Mistakes&nbsp;<span>0</span></p>
             </li>
             <li class="accuracy">
               <p>Accuracy&nbsp;<span>0%</span></p>
             </li>
-            <li class="wpm">
-              <abbr
-                title="Words per minute"><p>WPM&nbsp;<span>0</span></p></abbr>
-            </li>
-            <li class="cpm">
-              <abbr
-                title="Characters per minute"><p>CPM&nbsp;<span>0</span></p></abbr>
-            </li>
           </ul>
           <button id="next-paragraph">Refresh&nbsp;</button>
+        </div>
+      </div>
+
+      <div class="shortcuts-footer">
+        <div class="hotkey-items" id="hotkey-items">
+          <span class="hotkey-item"><kbd>Esc</kbd> Reset</span>
+          <span class="hotkey-item"><kbd>M</kbd> Mute</span>
+          <span class="hotkey-item"><kbd>T</kbd> Theme</span>
+        </div>
+        <div class="toggle-hints-btn" title="Toggle shortcuts">
+          <kbd>?</kbd>
         </div>
       </div>
     </div>
@@ -107,7 +120,7 @@
       <div class="alert-content">
         <h2>Results</h2>
         <div class="results-grid">
-          <div class="result-row score-row">
+          <div class="result-row">
             <span class="result-label"><b>Score</b></span>
             <span class="result-value" id="final-score">0 / 0</span>
           </div>
