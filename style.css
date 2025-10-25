@@ -64,13 +64,63 @@ h2 {
 
 .toggle-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 18px;
   width: 100%;
+  justify-content: flex-start;
 }
 
-.theme-label {
-  margin-left: 10px;
+/* Removed unused .theme-label (no HTML/JS references) */
+
+.toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-icon i {
+  font-size: 22px;
+  color: #777;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.toggle-icon.active i {
+  color: #bc0517;
+}
+
+.toggle-icon:hover i {
+  transform: scale(1.05);
+}
+
+/* Removed unused .toggle-label */
+
+body.dark .toggle-icon i {
+  color: #bc0517;
+}
+
+body.dark .toggle-icon.active i {
+  color: #bc0517;
+}
+
+.toggle-container i {
+  vertical-align: middle;
+}
+
+.shortcuts-footer kbd {
+  background: #222;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+}
+
+body.dark .shortcuts-footer kbd {
+  background: #333;
+  border-color: #666;
 }
 
 .paragraph-instructions {
@@ -97,9 +147,10 @@ body {
   justify-content: center;
   min-height: 100vh;
   background-image: url('./assets/bg.jpg');
+  padding: 10px;
+  box-sizing: border-box;
 }
 
-/* 🕒 Horizontal expanding time dropdown */
 .horizontal-time-dropdown {
   position: relative;
   display: flex;
@@ -108,19 +159,17 @@ body {
   cursor: pointer;
 }
 
-.horizontal-time-dropdown .time-icon svg {
-  width: 22px;
-  height: 22px;
-  fill: #bc0517;
-  transition: transform 0.25s ease, fill 0.25s ease;
+.horizontal-time-dropdown .time-icon i {
+  font-size: 22px;
+  color: #bc0517;
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
-.horizontal-time-dropdown.open .time-icon svg {
+.horizontal-time-dropdown.open .time-icon i {
   transform: rotate(90deg);
-  fill: #a00412;
+  color: #a00412;
 }
 
-/* Time options appear inline next to icon */
 .time-options {
   display: flex;
   gap: 8px;
@@ -154,7 +203,6 @@ body {
   background: rgba(188, 5, 23, 0.05);
 }
 
-/* Dark mode */
 body.dark .time-options span {
   color: #ddd;
 }
@@ -165,7 +213,145 @@ body.dark .time-options span:hover {
   background: rgba(188, 5, 23, 0.2);
 }
 
-/* --- Input Indicator Styles --- */
+.horizontal-mode-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 14px;
+  cursor: pointer;
+}
+
+.horizontal-mode-dropdown .mode-icon i {
+  font-size: 22px;
+  color: #bc0517;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.horizontal-mode-dropdown.open .mode-icon i {
+  transform: rotate(90deg);
+  color: #a00412;
+}
+
+.mode-options {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+  opacity: 1;
+  transform: scaleX(1);
+  transform-origin: left center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.mode-options.hidden {
+  opacity: 0;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+.mode-options span {
+  font-family: 'Kirsty Regular';
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.mode-options span:hover {
+  color: #bc0517;
+  border-color: #bc0517;
+  background: rgba(188, 5, 23, 0.05);
+}
+
+.mode-options span.active {
+  color: #fff;
+  background: #bc0517;
+  border-color: #bc0517;
+}
+
+body.dark .mode-options span {
+  color: #ddd;
+}
+
+body.dark .mode-options span:hover {
+  color: #bc0517;
+  border-color: #bc0517;
+  background: rgba(188, 5, 23, 0.2);
+}
+
+.horizontal-wordcount-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 14px;
+  cursor: pointer;
+}
+
+.horizontal-wordcount-dropdown.control-hidden {
+  display: none;
+}
+
+.horizontal-wordcount-dropdown .wordcount-icon i {
+  font-size: 22px;
+  color: #bc0517;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.horizontal-wordcount-dropdown.open .wordcount-icon i {
+  transform: rotate(90deg);
+  color: #a00412;
+}
+
+.wordcount-options {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+  opacity: 1;
+  transform: scaleX(1);
+  transform-origin: left center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.wordcount-options.hidden {
+  opacity: 0;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+.wordcount-options span {
+  font-family: 'Kirsty Regular';
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.wordcount-options span:hover {
+  color: #bc0517;
+  border-color: #bc0517;
+  background: rgba(188, 5, 23, 0.05);
+}
+
+.wordcount-options span.active {
+  color: #fff;
+  background: #bc0517;
+  border-color: #bc0517;
+}
+
+body.dark .wordcount-options span {
+  color: #ddd;
+}
+
+body.dark .wordcount-options span:hover {
+  color: #bc0517;
+  border-color: #bc0517;
+  background: rgba(188, 5, 23, 0.2);
+}
 
 .input-field-wrapper {
   flex-grow: 1;
@@ -175,7 +361,6 @@ body.dark .time-options span:hover {
   margin: 0 10px;
 }
 
-/* Visually hide the input field but keep it accessible for typing */
 .hidden-input {
   position: absolute;
   opacity: 0;
@@ -188,62 +373,113 @@ body.dark .time-options span:hover {
   border: 0;
 }
 
-/* Style the typewriter indicator icon wrapper */
 .input-indicator {
-  width: 40px; /* Smaller container */
-  height: 40px; /* Smaller container */
-  background-color: transparent; /* Remove background */
-  border-radius: 0; /* Remove border-radius */
+  position: relative;
+  width: auto;
+  height: 40px;
+  background-color: transparent;
+  border-radius: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
   transition: all 0.3s ease;
   cursor: text;
-  box-shadow: none; /* Remove shadow */
+  box-shadow: none;
 }
 
-/* Style the SVG icon */
 .typewriter-icon {
-  width: 25px; /* Smaller icon */
-  height: 25px; /* Smaller icon */
-  fill: #777; /* Default unfocused color (Dark Gray) */
+  width: 25px;
+  height: 25px;
+  fill: #777;
   transition: fill 0.3s ease;
 }
 
-/* The state when the hidden input field is focused: change ICON color */
-.input-indicator.focused .typewriter-icon {
-  fill: #bc0517; /* Focused icon color (Red) */
+.start-typing-hint {
+  display: none;
+  font-size: 14px;
+  color: #bc0517;
+  font-weight: bold;
+  white-space: nowrap;
+  animation: pulse 2s ease-in-out infinite;
+  pointer-events: none;
 }
 
-/* Dark mode styles for the indicator */
+.input-indicator.ready .start-typing-hint {
+  display: inline;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.input-indicator.focused .start-typing-hint,
+.input-indicator.game-started .start-typing-hint {
+  display: none;
+}
+
+.input-indicator.focused .typewriter-icon {
+  fill: #bc0517;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0.3;
+  }
+}
+
 body.dark .input-indicator {
   background-color: transparent;
   box-shadow: none;
 }
 
 body.dark .typewriter-icon {
-  fill: #aaa; /* Default unfocused color for dark mode */
+  fill: #aaa;
 }
 
 body.dark .input-indicator.focused .typewriter-icon {
-  fill: #bc0517; /* Focused icon color (Red) */
+  fill: #bc0517;
 }
 
-/* --- Media Query Adjustments for Mobile Layout --- */
+body.dark .start-typing-hint {
+  color: #ff4444;
+}
 
 @media (max-width: 768px) {
   .top-controls {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .input-field-wrapper {
     width: 100%;
-    margin: 10px 0; 
+    margin: 10px 0;
     order: 2;
   }
 
-  .completion-percentage {
+  .start-typing-hint {
+    font-size: 12px;
+  }
+
+  .progress-bar-container {
     order: 1;
   }
 
@@ -252,43 +488,63 @@ body.dark .input-indicator.focused .typewriter-icon {
   }
 }
 
-/* --- Hotkeys and Hint Styles --- */
-
-/* Ensure the overall hotkeys container allows its block-level child (the hint) to force a line break */
-.paragraph-instructions.hotkeys-tooltip {
-  display: inline-block;
-  text-align: left; /* Aligns the hotkeys and the hint to the left within their container */
-}
-
-/* Ensure individual hotkey items flow inline */
-.hotkey-item {
-  display: inline-block;
-  margin-right: 10px; 
-}
-
-/* The hint text is explicitly set to block to force it onto a new line */
-.hotkey-hint {
+.shortcuts-footer {
   position: fixed;
-  bottom: 20px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.2em;
-  color: #888; 
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
   text-align: center;
   z-index: 10;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 }
 
-.hotkey-hint:hover {
-  opacity: 1;
+.shortcuts-footer .hotkey-hint {
+  font-size: 1.1em;
+  color: #888;
+  opacity: 0.9;
 }
 
-/* Dark mode adjustment for the hint */
-body.dark .hotkey-hint {
+.shortcuts-footer .hotkey-items {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.shortcuts-footer .hotkey-hint.hidden {
+  display: none;
+}
+
+.shortcuts-footer .hotkey-items.hidden {
+  display: none;
+}
+
+.hotkey-item {
+  display: inline-block;
+}
+
+.toggle-hints-btn {
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.toggle-hints-btn kbd {
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.toggle-hints-btn:hover {
+  opacity: 0.7;
+}
+
+body.dark .shortcuts-footer .hotkey-hint {
   color: #bbb;
 }
-
 
 .wrapper {
   width: 900px;
@@ -297,9 +553,7 @@ body.dark .hotkey-hint {
   border-radius: 10px;
   border: 0.5px solid #bc0517;
   position: relative;
-  /* allow absolute children like translate corner */
 }
-
 
 .wrapper .content-box {
   padding: 13px 20px 0;
@@ -314,11 +568,26 @@ body.dark .hotkey-hint {
 
 .content-box .typing-text {
   height: calc(24px * 1.7 * 3);
-  /* font-size * line-height * 3 lines */
   position: relative;
   overflow: hidden;
   margin: 0;
   padding: 10px 0;
+}
+
+.typing-text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(var(--bg-color, #fff), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dark .typing-text::before {
+  background: linear-gradient(var(--bg-color, #2a2a2a), transparent);
 }
 
 .typing-text::after {
@@ -336,8 +605,6 @@ body.dark .hotkey-hint {
   background: linear-gradient(transparent, var(--bg-color, #2a2a2a));
 }
 
-
-
 abbr {
   text-decoration: none;
 }
@@ -354,10 +621,10 @@ ul li {
   font-size: 28px;
   text-align: left;
   letter-spacing: 1px;
-  word-break: breaword;
+  word-break: break-word;
   white-space: pre-wrap;
-  line-height: 1.5;
-  transform: translateY(0);
+  line-height: 1.6;
+  transform: translateY(45px);
   will-change: transform;
   margin: 0;
   padding: 0;
@@ -465,25 +732,9 @@ ul li {
   margin: 10px;
 }
 
-.top-controls select.time-selector {
-  padding: 8px 30px 8px 10px;
-  font-size: 15px;
-  border: 1px solid #bc0517;
-  border-radius: 4px;
-  background-color: #fff;
-  width: 160px;
-  margin-right: 10px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg fill="%23bc0517" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  cursor: pointer;
-}
+/* Removed legacy select.time-selector styles (replaced by horizontal dropdown) */
 
-.result-details,
-.time-selector {
+.result-details {
   font-family: 'Kirsty Regular';
 }
 
@@ -491,6 +742,11 @@ ul li {
   display: flex;
   align-items: center;
   margin-left: 10px;
+}
+
+.score-container span#score {
+  font-size: 20px;
+  font-family: 'Kirsty Regular';
 }
 
 .input-field:disabled {
@@ -536,27 +792,7 @@ button:disabled {
   align-items: center;
 }
 
-.time-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.time-container img {
-  width: 24px;
-  height: 24px;
-}
-
-.time-container p {
-  font-size: 18px;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-
-.time-container b {
-  margin-left: 5px;
-}
+/* Removed unused .time-container styles */
 
 .alert-card {
   position: fixed;
@@ -567,6 +803,7 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .alert-content {
@@ -620,20 +857,50 @@ button:disabled {
   align-items: center;
 }
 
-.completion-percentage {
+/* Removed unused .completion-percentage styles (replaced by .progress-bar-container) */
+
+.progress-bar-container {
+  height: 6px;
+  width: 100%;
+  max-width: 200px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
   margin-right: 10px;
-  font-size: 14px;
-  font-weight: bold;
+  overflow: hidden;
+  position: relative;
 }
 
-.completion-percentage span {
-  color: #333;
+.progress-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(to right, #bc0517, #ff0620);
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
+body.dark .progress-bar-container {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .theme-switch {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.theme-switch .header-time span {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Kirsty Regular';
+  font-size: 16px;
+  color: #333;
+}
+
+body.dark .theme-switch .header-time span {
+  color: #ddd;
 }
 
 .switch {
@@ -715,8 +982,6 @@ input:checked+.slider:before {
   background-color: #444;
 }
 
-
-
 .dark .content-box {
   border: 1px solid #bc0517;
 }
@@ -725,16 +990,7 @@ input:checked+.slider:before {
   border-top: 1px solid #bc0517;
 }
 
-.dark .time-selector {
-  background-color: #555;
-  border: 1px solid #bc0517;
-  color: #ddd;
-}
-
-.dark .time-selector option {
-  background-color: #555;
-  color: #ddd;
-}
+/* Removed dark styles for legacy .time-selector */
 
 .dark .input-field {
   background-color: #555;
@@ -785,11 +1041,7 @@ body.dark .content button {
   color: #e0e0e0;
 }
 
-body.dark .time-selector {
-  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center center;
-  border-color: #444;
-  color: #e0e0e0;
-}
+/* Removed additional dark styles for legacy .time-selector */
 
 body.dark .alert-content {
   background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center center;
@@ -803,11 +1055,7 @@ body.dark .alert-content button {
   color: #121212;
 }
 
-body.dark .dark-mode-toggle {
-  background-color: #2a2a2a;
-  border-color: #444;
-  color: #e0e0e0;
-}
+/* Removed unused .dark-mode-toggle dark styles */
 
 @media (max-width: 768px) {
   .result-details li:not(:first-child) {
@@ -816,8 +1064,14 @@ body.dark .dark-mode-toggle {
   }
 
   .wrapper {
-    width: 90%;
+    width: calc(100% - 20px);
+    max-width: 900px;
     padding: 20px;
+    margin: 10px;
+  }
+
+  .content-box {
+    padding: 10px 15px 0;
   }
 
   .content {
@@ -845,12 +1099,6 @@ body.dark .dark-mode-toggle {
     margin-top: 10px;
   }
 
-  .time-selector,
-  .text-length-selector {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
 
   .alert-content {
     width: 80%;
@@ -860,8 +1108,23 @@ body.dark .dark-mode-toggle {
     flex-direction: column;
   }
 
-  .completion-percentage {
+  .progress-bar-container {
     margin-bottom: 10px;
+    max-width: 100%;
+  }
+
+  .hotkey-hint {
+    font-size: 1em;
+    bottom: 10px;
+    padding: 0 10px;
+  }
+
+  .paragraph-instructions {
+    font-size: 12px;
+  }
+
+  .hotkey-item {
+    margin-right: 5px;
   }
 }
 
@@ -869,6 +1132,16 @@ body.dark .dark-mode-toggle {
   .result-details li:not(:first-child) {
     padding-left: 22px;
     border-left: none;
+  }
+
+  .wrapper {
+    margin: 10px;
+    padding: 15px;
+    width: calc(100% - 20px);
+  }
+
+  .content-box {
+    padding: 8px 10px 0;
   }
 
   .input-field {
@@ -895,7 +1168,6 @@ body.dark .dark-mode-toggle {
     flex: 1 1 auto;
   }
 }
-
 
 .paragraph-instructions {
   margin-left: auto;
@@ -942,7 +1214,6 @@ body.dark .dark-mode-toggle {
   color: white;
 }
 
-/* --- Accuracy Row --- */
 .accuracy-row {
   margin-top: 8px;
   text-align: center;
@@ -975,12 +1246,10 @@ body.dark .dark-mode-toggle {
   color: #e0e0e0;
 }
 
-/* --- Completion Row --- */
 .completion-row {
   margin-top: 6px;
   text-align: center;
   padding-top: 6px;
-  /* smooth vertical rhythm */
 }
 
 .completion-row .result-label,
@@ -1000,7 +1269,6 @@ body.dark .dark-mode-toggle {
   margin-bottom: 2px;
 }
 
-/* --- Accuracy Row --- */
 .accuracy-row .result-label,
 .accuracy-row .result-value,
 .completion-row .result-label,
@@ -1027,7 +1295,6 @@ body.dark .dark-mode-toggle {
   color: #e0e0e0;
 }
 
-/* --- Completion Row --- */
 .completion-row .result-label {
   color: #bc0517;
   text-transform: uppercase;
