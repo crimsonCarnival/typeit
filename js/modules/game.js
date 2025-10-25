@@ -5,9 +5,9 @@ import { generateWordContent } from '../words.js'
 
 let isMuted = false
 
-const keySound = new Audio('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/typewriter-single-key.mp3')
-const timeUpSound = new Audio('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/typewriter-bell.mp3')
-const errorSound = new Audio('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/error-sound.mp3')
+const keySound = new Audio('./assets/typewriter-single-key.mp3')
+const timeUpSound = new Audio('./assets/typewriter-bell.mp3')
+const errorSound = new Audio('./assets/error-sound.mp3')
 
 export const setMuted = muted => isMuted = muted
 
