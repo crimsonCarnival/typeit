@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Hapna Demibold';
-  src: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/Hapna-Demibold.ttf');
+  src: url('./assets/Hapna-Demibold.ttf');
 }
 
 @font-face {
   font-family: 'Kirsty Regular';
-  src: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/Kirsty.ttf');
+  src: url('./assets/Kirsty.ttf');
 }
 
 :root {

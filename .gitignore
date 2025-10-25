@@ -1,0 +1,8 @@
+# Ignore only images and sounds in assets; keep fonts tracked
+/assets/*.jpg
+/assets/*.jpeg
+/assets/*.png
+/assets/*.gif
+/assets/*.mp3
+/assets/*.wav
+/assets/*.ogg
