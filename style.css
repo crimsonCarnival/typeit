@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Hapna Demibold';
-  src: url('./assets/Hapna-Demibold.ttf');
+  src: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/Hapna-Demibold.ttf');
 }
 
 @font-face {
   font-family: 'Kirsty Regular';
-  src: url('./assets/Kirsty.ttf');
+  src: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/Kirsty.ttf');
 }
 
 :root {
@@ -146,7 +146,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-image: url('./assets/bg.jpg');
+  background-image: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/bg.jpg');
   padding: 10px;
   box-sizing: border-box;
 }
@@ -807,7 +807,7 @@ button:disabled {
 }
 
 .alert-content {
-  background: #bc0517 url('./assets/bg.jpg');
+  background: #bc0517 url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/bg.jpg');
   margin-left: 20px;
   padding: 20px;
   border-radius: 10px;
@@ -823,7 +823,7 @@ button:disabled {
 #close-alert {
   margin-top: 20px;
   padding: 10px 20px;
-  background-image: url('./assets/info-bg.jpg');
+  background-image: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/info-bg.jpg');
   color: #e0e0e0;
   border-radius: 5px;
   cursor: pointer;
@@ -832,19 +832,19 @@ button:disabled {
 #close-info-alert {
   margin-top: 20px;
   padding: 10px 20px;
-  background-image: url('./assets/info-bg.jpg');
+  background-image: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/info-bg.jpg');
   color: #e0e0e0;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .dark #close-alert {
-  background-image: url('./assets/bg.jpg');
+  background-image: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/bg.jpg');
   color: #e0e0e0;
 }
 
 .dark #close-info-alert {
-  background-image: url('./assets/bg.jpg');
+  background-image: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/bg.jpg');
   color: #e0e0e0;
 }
 
@@ -958,7 +958,7 @@ input:checked+.slider:before {
 }
 
 .dark {
-  background-image: url('./assets/info-bg.jpg');
+  background-image: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/info-bg.jpg');
   color: #ddd;
 }
 
@@ -1011,11 +1011,11 @@ input:checked+.slider:before {
 }
 
 body.dark {
-  background-image: url('./assets/info-bg.jpg');
+  background-image: url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/info-bg.jpg');
 }
 
 body.dark .wrapper {
-  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center center;
+  background: rgba(30, 30, 30, 0.8) url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/info-bg.jpg') no-repeat center center;
   background-size: cover;
   color: #e0e0e0;
   border: 0.5px solid #bc0517;
@@ -1044,7 +1044,7 @@ body.dark .content button {
 /* Removed additional dark styles for legacy .time-selector */
 
 body.dark .alert-content {
-  background: rgba(30, 30, 30, 0.8) url('./assets/info-bg.jpg') no-repeat center center;
+  background: rgba(30, 30, 30, 0.8) url('https://cdn.githubraw.com/crimsonCarnival/typeit/main/assets/info-bg.jpg') no-repeat center center;
   background-size: cover;
   color: #e0e0e0;
   border: 0.5px solid #e0e0e0;
@@ -1325,3 +1325,4 @@ body.dark .alert-content button {
 .dark .completion-row .result-value {
   color: #e0e0e0;
 }
+
